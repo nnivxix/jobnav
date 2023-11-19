@@ -13,7 +13,7 @@ const submit = form.handleSubmit((values: { email: string; password: string }) =
 const showPassword = ref(false);
 </script>
 <template>
-  <div class="max-w-7xl mx-auto grid grid-cols-6 h-screen">
+  <div class="max-w-7xl mx-auto grid grid-cols-6 h-[70vh]">
     <main class="lg:col-start-1 lg:col-span-3 hidden lg:block"></main>
     <form
       @submit.prevent="submit"

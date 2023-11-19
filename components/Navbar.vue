@@ -81,7 +81,9 @@ const rightLinks = ref([
           :key="index"
           :to="centerLink.destination"
         >
-          {{ centerLink.name }}
+          <DialogClose>
+            {{ centerLink.name }}
+          </DialogClose>
         </NuxtLink>
         <NuxtLink
           v-for="(rightLink, index) in rightLinks"
@@ -89,11 +91,15 @@ const rightLinks = ref([
           :to="rightLink.destination"
           class="even:bg-[#FFB84C] even:rounded-lg even:text-white p-2 w-auto &:nth-child(2):underline"
         >
-          {{ rightLink.name }}
+          <DialogClose>
+            {{ rightLink.name }}
+          </DialogClose>
         </NuxtLink>
         <div class="flex items-center space-x-2">
-          <Switch id="dark-mode" v-model:checked="isDark" />
-          <Label for="dark-mode">Enable Dark Mode</Label>
+          <DialogClose>
+            <Switch id="dark-mode" v-model:checked="isDark" />
+            <Label class="pl-3" for="dark-mode">Enable Dark Mode</Label>
+          </DialogClose>
         </div>
       </DialogContent>
     </Dialog>
