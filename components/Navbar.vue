@@ -74,7 +74,7 @@ const rightLinks = ref([
       <DialogTrigger>
         <Icon name="ph:list-bold" class="w-7 h-auto" />
       </DialogTrigger>
-      <DialogContent class="right-0 top-[21%]" widthIcon="w-7">
+      <DialogContent class="right-0 top-[22%]" widthIcon="w-7">
         <NuxtLink
           class="p-2"
           v-for="(centerLink, index) in centerLinks"
