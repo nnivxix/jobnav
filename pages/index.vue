@@ -1,6 +1,8 @@
 <template>
   <div>
     <Navbar />
+    <!-- Content -->
+    <Footer />
   </div>
 </template>
 
