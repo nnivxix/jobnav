@@ -11,7 +11,7 @@ import {
 import { Cross2Icon } from "@radix-icons/vue";
 import { cn } from "@/lib/utils";
 
-const props = defineProps<DialogContentProps & { class?: string }>();
+const props = defineProps<DialogContentProps & { class?: string; widthIcon?: string }>();
 const emits = defineEmits<DialogContentEmits>();
 
 const emitsAsProps = useEmitAsProps(emits);
@@ -36,7 +36,7 @@ const emitsAsProps = useEmitAsProps(emits);
       <DialogClose
         class="absolute top-4 right-4 p-0.5 transition-colors rounded-md hover:bg-secondary"
       >
-        <Cross2Icon class="w-7 h-7" />
+        <Cross2Icon class="w-4 h-auto" :class="props.widthIcon" />
         <span class="sr-only">Close</span>
       </DialogClose>
     </DialogContent>
