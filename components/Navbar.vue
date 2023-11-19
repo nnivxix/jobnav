@@ -1,4 +1,6 @@
 <script setup lang="ts">
+const isDark = useDark();
+const toggleDark = useToggle(isDark);
 const centerLinks = ref([
   {
     name: "Find Jobs",
@@ -43,7 +45,7 @@ const rightLinks = ref([
       </NuxtLink>
     </div>
     <!-- Condition if unauthenticated -->
-    <div class="col-span-3 place-self-end self-center">
+    <div class="col-span-2 place-self-end self-center">
       <NuxtLink
         v-for="(rightLink, index) in rightLinks"
         :key="index"
@@ -56,6 +58,13 @@ const rightLinks = ref([
     <!-- Condition if authenticated -->
     <!-- Start code here -->
     <!-- End code here -->
+    <div class="col-span-1 place-self-end self-center">
+      <Button variant="ghost" class="p-2" @click="toggleDark()">
+        <Icon name="ph:moon-fill" v-if="!isDark" class="h-5 w-5" />
+        <Icon name="ph:sun-dim-fill" v-else class="h-5 w-5" />
+        <span class="sr-only">Toggle dark mode</span>
+      </Button>
+    </div>
   </nav>
 
   <!-- Mobile navbar -->
@@ -82,6 +91,10 @@ const rightLinks = ref([
         >
           {{ rightLink.name }}
         </NuxtLink>
+        <div class="flex items-center space-x-2">
+          <Switch id="dark-mode" v-model:checked="isDark" />
+          <Label for="dark-mode">Enable Dark Mode</Label>
+        </div>
       </DialogContent>
     </Dialog>
   </nav>
