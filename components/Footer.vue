@@ -23,7 +23,7 @@ const socials = ref([
 ]);
 </script>
 <template>
-  <div class="grid grid-cols-6 max-w-7xl mx-auto mb-5 px-4">
+  <div class="grid grid-cols-6 max-w-7xl mx-auto mb-5 px-4 lg:px-0">
     <div class="md:col-start-1 flex flex-col md:col-span-2 col-span-full">
       <NuxtLink class="text-2xl font-semibold py-3" to="/"> Jobnav.id </NuxtLink>
       <NuxtLink to="mailto:hello@jobnav.id" class="py-3">hello@jobnav.id</NuxtLink>
