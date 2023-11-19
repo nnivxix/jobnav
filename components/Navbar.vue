@@ -57,7 +57,34 @@ const rightLinks = ref([
     <!-- Start code here -->
     <!-- End code here -->
   </nav>
-  <nav></nav>
+
+  <!-- Mobile navbar -->
+  <nav class="lg:hidden flex justify-between px-4 py-5">
+    <NuxtLink class="text-lg font-semibold" to="/"> Jobnav </NuxtLink>
+    <Dialog>
+      <DialogTrigger>
+        <Icon name="ph:list-bold" class="w-7 h-auto" />
+      </DialogTrigger>
+      <DialogContent class="right-0 top-[20%]">
+        <NuxtLink
+          class="p-2"
+          v-for="(centerLink, index) in centerLinks"
+          :key="index"
+          :to="centerLink.destination"
+        >
+          {{ centerLink.name }}
+        </NuxtLink>
+        <NuxtLink
+          v-for="(rightLink, index) in rightLinks"
+          :key="index"
+          :to="rightLink.destination"
+          class="even:bg-[#FFB84C] even:rounded-lg even:text-white p-2 w-auto &:nth-child(2):underline"
+        >
+          {{ rightLink.name }}
+        </NuxtLink>
+      </DialogContent>
+    </Dialog>
+  </nav>
 </template>
 
 <style scoped></style>
