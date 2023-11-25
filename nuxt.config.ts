@@ -8,6 +8,9 @@ export default defineNuxtConfig({
     "@vee-validate/nuxt",
     "@pinia/nuxt",
   ],
+  pinia: {
+    storesDirs: ["./stores/**"],
+  },
   runtimeConfig: {
     public: {
       backendUrl: "http://localhost:8000",
