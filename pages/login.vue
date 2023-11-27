@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { useForm, Form, Field as FormField } from "vee-validate";
-
+definePageMeta({
+  middleware: "login",
+});
 const { login } = useAuthStore();
 const form = useForm({
   initialValues: {
