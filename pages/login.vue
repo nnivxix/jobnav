@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useForm, Form, Field as FormField } from "vee-validate";
 
-const { login } = useAuth();
+const { login } = useAuthStore();
 const form = useForm({
   initialValues: {
     email: "hanasa@hanasa.com",

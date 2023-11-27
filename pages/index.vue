@@ -1,5 +1,6 @@
 <script setup lang="ts">
-const { user, isLogedIn } = useAuthStore();
+const { user, isLogedIn, token } = useAuthStore();
+// fetchUser(user?.token as string);
 </script>
 <template>
   <div>
@@ -7,9 +8,8 @@ const { user, isLogedIn } = useAuthStore();
     <!-- Content -->
 
     <!-- BUG: Still not reactive -->
-    <ClientOnly>
-      <pre>{{ user }}</pre>
-      <pre>{{ isLogedIn }}</pre>
-    </ClientOnly>
+    <pre>{{ token }}</pre>
+    <pre>{{ user }}</pre>
+    <pre>{{ isLogedIn }}</pre>
   </div>
 </template>

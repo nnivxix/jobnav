@@ -1,3 +1,4 @@
+// import { RuntimeConfig } from 'nuxt/schema';
 export interface LaravelFetchOptions {
   method:
     | "GET"
@@ -22,22 +23,36 @@ export interface LaravelFetchOptions {
 }
 
 const useLaravelFetch = (path: string, options?: Partial<LaravelFetchOptions>) => {
-  let headersOption: any = {
+  let headers: any = {
     accept: "application/json",
     "Content-Type": "application/json",
+    ...options?.headers,
   };
 
   const cookie = useCookie("XSRF-TOKEN");
   if (cookie.value) {
-    headersOption["X-XSRF-TOKEN"] = cookie.value as string;
+    headers["X-XSRF-TOKEN"] = cookie.value as string;
   }
 
+  if (process.client) {
+    const token = window.localStorage.getItem("token");
+    if (token) {
+      headers["Authorization"] = "Bearer " + token;
+    }
+  }
+
+  if (process.server) {
+    headers = {
+      ...headers,
+      ...useRequestHeaders(["referer", "cookie"]),
+      referer: useRuntimeConfig().public.frontendUrl,
+    };
+  }
   return useFetch(path, {
     baseURL: useRuntimeConfig().public.backendUrl,
     credentials: "include",
     headers: {
-      ...headersOption,
-      ...options?.headers,
+      ...headers,
     },
     method: options?.method,
     body: options?.body,

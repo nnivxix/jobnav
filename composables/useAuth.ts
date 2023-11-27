@@ -5,7 +5,8 @@ export type LoginCredentials = {
   password: string;
 };
 
-const userStore = useAuthStore();
+const { user, login } = useAuthStore();
+
 export const useAuth = () => {
   async function login(credentials: LoginCredentials) {
     await useLaravelFetch("/sanctum/csrf-cookie");
@@ -23,15 +24,6 @@ export const useAuth = () => {
         name: data.value?.data.name,
         token: data.value?.token,
       };
-      userStore.$patch({
-        user: {
-          id: data.value?.data.id,
-          email: data.value?.data.email,
-          username: data.value.data.username,
-          name: data.value?.data.name,
-          token: data.value?.token,
-        },
-      });
       navigateTo("/");
     }
     /** TODO
