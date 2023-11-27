@@ -1,6 +1,7 @@
 <script setup lang="ts">
 const isDark = useDark();
 const toggleDark = useToggle(isDark);
+const { isLogedIn, user } = useAuthStore();
 const centerLinks = ref([
   {
     name: "Find Jobs",
@@ -30,6 +31,10 @@ const rightLinks = ref([
     destination: "/sign-up",
   },
 ]);
+
+async function handleLogout() {
+  console.log("log out");
+}
 </script>
 <template>
   <nav class="hidden lg:grid grid-cols-12 gap-4 max-w-7xl mx-auto text-lg font-semibold mt-4">
@@ -45,7 +50,7 @@ const rightLinks = ref([
       </NuxtLink>
     </div>
     <!-- Condition if unauthenticated -->
-    <div class="col-span-2 place-self-end self-center">
+    <div v-if="!isLogedIn" class="col-span-2 place-self-end self-center">
       <NuxtLink
         v-for="(rightLink, index) in rightLinks"
         :key="index"
@@ -57,6 +62,10 @@ const rightLinks = ref([
     </div>
     <!-- Condition if authenticated -->
     <!-- Start code here -->
+    <div v-else class="col-span-2 place-self-end self-center flex">
+      <img :src="user?.avatar" :alt="user?.name" class="w-9 h-9 rounded-full" />
+      <Button @click="handleLogout" class="ml-5"> logout </Button>
+    </div>
     <!-- End code here -->
     <div class="col-span-1 place-self-end self-center">
       <Button variant="ghost" class="p-2" @click="toggleDark()">

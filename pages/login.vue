@@ -1,14 +1,18 @@
 <script setup lang="ts">
 import { useForm, Form, Field as FormField } from "vee-validate";
+definePageMeta({
+  middleware: "login",
+});
+const { login } = useAuthStore();
 const form = useForm({
   initialValues: {
-    email: "",
-    password: "",
+    email: "hanasa@hanasa.com",
+    password: "password",
   },
 });
 
 const submit = form.handleSubmit((values: { email: string; password: string }) => {
-  console.log("Form submitted!", values);
+  login(values);
 });
 const showPassword = ref(false);
 </script>
