@@ -1,38 +1,48 @@
-import { useLocalStorage, useStorage, StorageSerializers } from "@vueuse/core";
-
+interface UserResponse {
+  data: User;
+}
 export type LoginCredentials = {
   email: string;
   password: string;
 };
 
-const { user, login } = useAuthStore();
+// const {  updateUser } = useAuthStore();
 
 export const useAuth = () => {
   async function login(credentials: LoginCredentials) {
     await useLaravelFetch("/sanctum/csrf-cookie");
-    const { data, error }: { data: any; error: any } = await useLaravelFetch("/api/login", {
+    const { data, error } = await useLaravelFetch("/api/login", {
       method: "POST",
       body: credentials,
     });
-
-    const user = useStorage("user", {});
     if (data.value) {
-      user.value = {
-        id: data.value?.data.id,
-        email: data.value?.data.email,
-        username: data.value.data.username,
-        name: data.value?.data.name,
-        token: data.value?.token,
-      };
-      navigateTo("/");
+      await fetchUser();
+      navigateTo("/dashboard");
+      return data;
     }
+
     /** TODO
      * Handle error
      *
      */
   }
+  async function fetchUser() {
+    const { data } = await useLaravelFetch("/api/users");
+    const userData = ref<UserResponse | null>(data.value as UserResponse);
+    return data;
+  }
+
+  async function logout() {
+    await useLaravelFetch("/api/logout", {
+      method: "POST",
+    });
+    window.localStorage.removeItem("token");
+    navigateTo("/");
+  }
 
   return {
     login,
+    logout,
+    fetchUser,
   };
 };

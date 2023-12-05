@@ -1,7 +1,9 @@
 <script setup lang="ts">
 const isDark = useDark();
 const toggleDark = useToggle(isDark);
-const { isLogedIn, user } = useAuthStore();
+const { logout } = useAuth();
+const { updateUser } = useAuthStore();
+const { isLogedIn, user } = storeToRefs(useAuthStore());
 const centerLinks = ref([
   {
     name: "Find Jobs",
@@ -33,7 +35,8 @@ const rightLinks = ref([
 ]);
 
 async function handleLogout() {
-  console.log("log out");
+  updateUser(null);
+  logout();
 }
 </script>
 <template>
@@ -49,8 +52,15 @@ async function handleLogout() {
         {{ centerLink.name }}
       </NuxtLink>
     </div>
-    <!-- Condition if unauthenticated -->
-    <div v-if="!isLogedIn" class="col-span-2 place-self-end self-center">
+
+    <!-- Condition if authenticated -->
+    <div v-if="isLogedIn" class="col-span-2 place-self-end self-center flex">
+      <NuxtLink to="/dashboard">
+        <img :src="user?.avatar" :alt="user?.name" class="w-9 h-9 rounded-full" />
+      </NuxtLink>
+      <Button @click="handleLogout" class="ml-5"> logout </Button>
+    </div>
+    <div v-else class="col-span-2 place-self-end self-center">
       <NuxtLink
         v-for="(rightLink, index) in rightLinks"
         :key="index"
@@ -62,10 +72,6 @@ async function handleLogout() {
     </div>
     <!-- Condition if authenticated -->
     <!-- Start code here -->
-    <div v-else class="col-span-2 place-self-end self-center flex">
-      <img :src="user?.avatar" :alt="user?.name" class="w-9 h-9 rounded-full" />
-      <Button @click="handleLogout" class="ml-5"> logout </Button>
-    </div>
     <!-- End code here -->
     <div class="col-span-1 place-self-end self-center">
       <Button variant="ghost" class="p-2" @click="toggleDark()">
@@ -83,7 +89,7 @@ async function handleLogout() {
       <DialogTrigger>
         <Icon name="ph:list-bold" class="w-7 h-auto" />
       </DialogTrigger>
-      <DialogContent class="right-0 top-[22%]" widthIcon="w-7">
+      <DialogContent class="left-[50%] top-0 translate-y-0" widthIcon="w-7">
         <NuxtLink
           class="p-2"
           v-for="(centerLink, index) in centerLinks"
@@ -94,16 +100,26 @@ async function handleLogout() {
             {{ centerLink.name }}
           </DialogClose>
         </NuxtLink>
-        <NuxtLink
-          v-for="(rightLink, index) in rightLinks"
-          :key="index"
-          :to="rightLink.destination"
-          class="even:bg-[#FFB84C] even:rounded-lg even:text-white p-2 w-auto &:nth-child(2):underline"
-        >
-          <DialogClose>
-            {{ rightLink.name }}
-          </DialogClose>
-        </NuxtLink>
+        <div v-if="isLogedIn" class="px-2 gap-2">
+          <NuxtLink to="/dashboard" class="flex items-center gap-3">
+            <img :src="user?.avatar" :alt="user?.name" class="w-9 h-9 rounded-full" />
+            <span>{{ user?.name }}</span>
+          </NuxtLink>
+          <button class="py-3" @click="handleLogout">logout</button>
+        </div>
+        <div v-else class="flex flex-col gap-4">
+          <NuxtLink
+            v-for="(rightLink, index) in rightLinks"
+            :key="index"
+            :to="rightLink.destination"
+            class="even:bg-[#FFB84C] even:rounded-lg even:text-white p-2 w-auto &:nth-child(2):underline"
+          >
+            <DialogClose>
+              {{ rightLink.name }}
+            </DialogClose>
+          </NuxtLink>
+        </div>
+
         <div class="flex items-center space-x-2">
           <DialogClose>
             <Switch id="dark-mode" v-model:checked="isDark" />

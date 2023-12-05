@@ -1,12 +1,12 @@
-import { useAuthStore } from "../stores/authStore";
-
+export interface UserResponse {
+  data: User;
+}
 export default defineNuxtPlugin(async (nuxtApp) => {
-  const { fetchUser } = useAuthStore();
+  const auth = useAuthStore();
+  const { fetchUser } = useAuth();
 
-  fetchUser();
-  if (process.client) {
-    useAuthStore().$patch({
-      token: window.localStorage.getItem("token"),
-    });
-  }
+  if (auth.user) return;
+  const data = await fetchUser();
+  const userData = ref<UserResponse | null>(data.value as UserResponse);
+  auth.updateUser(userData.value?.data);
 });
