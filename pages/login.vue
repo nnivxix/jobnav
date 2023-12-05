@@ -1,9 +1,14 @@
 <script setup lang="ts">
+export interface UserResponse {
+  data: User;
+}
 import { useForm, Form, Field as FormField } from "vee-validate";
 definePageMeta({
   middleware: "login",
 });
-const { login } = useAuthStore();
+const { login, fetchUser } = useAuth();
+const { updateUser } = useAuthStore();
+
 const form = useForm({
   initialValues: {
     email: "hanasa@hanasa.com",
@@ -11,8 +16,12 @@ const form = useForm({
   },
 });
 
-const submit = form.handleSubmit((values: { email: string; password: string }) => {
-  login(values);
+const submit = form.handleSubmit(async (values: { email: string; password: string }) => {
+  await login(values);
+  const data = await fetchUser();
+  const userData = ref<UserResponse | null>(data.value as UserResponse);
+  console.log(data);
+  updateUser(userData.value?.data);
 });
 const showPassword = ref(false);
 </script>
@@ -54,5 +63,3 @@ const showPassword = ref(false);
     </form>
   </div>
 </template>
-
-<style scoped></style>

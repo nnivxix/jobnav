@@ -11,35 +11,21 @@ export interface User {
   username: string;
 }
 
+export interface LoginResponse {
+  user: User;
+  token: string;
+}
+
 export const useAuthStore = defineStore("authStore", () => {
   const user = ref<User | null>(null);
   const token = ref<string | null>(null);
   const isLogedIn = computed(() => !!user.value);
-
-  async function login(credentials: LoginCredentials) {
-    await useLaravelFetch("/sanctum/csrf-cookie");
-    const { data, error }: { data: any; error: any } = await useLaravelFetch("/api/login", {
-      method: "POST",
-      body: credentials,
-    });
-    if (data.value) {
-      token.value = data.value.token;
-      localStorage.setItem("token", data.value.token);
-      navigateTo("/");
-      return;
-    }
-
-    /** TODO
-     * Handle error
-     *
-     */
-
-    console.log(error);
+  function updateUser(data: any) {
+    user.value = data;
   }
-  async function fetchUser() {
-    const { data, error }: { data: any; error: any } = await useLaravelFetch("/api/users");
-    user.value = data.value?.data as User;
+  function updateToken(data: any) {
+    user.value = data;
   }
 
-  return { user, isLogedIn, login, fetchUser, token };
+  return { user, isLogedIn, token, updateUser, updateToken };
 });

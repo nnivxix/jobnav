@@ -1,4 +1,3 @@
-// import { RuntimeConfig } from 'nuxt/schema';
 export interface LaravelFetchOptions {
   method:
     | "GET"
@@ -34,12 +33,12 @@ const useLaravelFetch = (path: string, options?: Partial<LaravelFetchOptions>) =
     headers["X-XSRF-TOKEN"] = cookie.value as string;
   }
 
-  if (process.client) {
-    const token = window.localStorage.getItem("token");
-    if (token) {
-      headers["Authorization"] = "Bearer " + token;
-    }
-  }
+  // if (process.client) {
+  //   const token = window.localStorage.getItem("token");
+  //   if (token) {
+  //     headers["Authorization"] = "Bearer " + token;
+  //   }
+  // }
 
   if (process.server) {
     headers = {
