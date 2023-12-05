@@ -121,10 +121,8 @@ async function handleLogout() {
         </div>
 
         <div class="flex items-center space-x-2">
-          <DialogClose>
-            <Switch id="dark-mode" v-model:checked="isDark" />
-            <Label class="pl-3" for="dark-mode">Enable Dark Mode</Label>
-          </DialogClose>
+          <Switch id="dark-mode" v-model:checked="isDark" />
+          <Label class="pl-3 cursor-pointer" for="dark-mode">Enable Dark Mode</Label>
         </div>
       </DialogContent>
     </Dialog>
