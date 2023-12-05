@@ -20,7 +20,6 @@ const submit = form.handleSubmit(async (values: { email: string; password: strin
   await login(values);
   const data = await fetchUser();
   const userData = ref<UserResponse | null>(data.value as UserResponse);
-  console.log(data);
   updateUser(userData.value?.data);
 });
 const showPassword = ref(false);

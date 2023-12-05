@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import type { VisuallyHidden } from "radix-vue";
+import { VisuallyHidden } from "radix-vue";
+import { Label } from "radix-vue";
 
 const isDark = useDark();
 const toggleDark = useToggle(isDark);
@@ -98,8 +99,8 @@ async function handleLogout() {
       </DialogTrigger>
       <DialogContent class="left-[50%] top-0 translate-y-0" widthIcon="w-7">
         <VisuallyHidden>
-          <DialogDescription></DialogDescription>
           <DialogTitle></DialogTitle>
+          <DialogDescription></DialogDescription>
         </VisuallyHidden>
         <NuxtLink
           class="p-2"
