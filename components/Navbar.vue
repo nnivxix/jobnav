@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { VisuallyHidden } from "radix-vue";
+
 const isDark = useDark();
 const toggleDark = useToggle(isDark);
 const { logout } = useAuth();
@@ -56,7 +58,12 @@ async function handleLogout() {
     <!-- Condition if authenticated -->
     <div v-if="isLogedIn" class="col-span-2 place-self-end self-center flex">
       <NuxtLink to="/dashboard">
-        <img :src="user?.avatar" :alt="user?.name" class="w-9 h-9 rounded-full" />
+        <img
+          :src="user?.avatar"
+          :title="user?.name"
+          :alt="user?.name"
+          class="w-9 h-9 rounded-full"
+        />
       </NuxtLink>
       <Button @click="handleLogout" class="ml-5"> logout </Button>
     </div>
@@ -90,6 +97,10 @@ async function handleLogout() {
         <Icon name="ph:list-bold" class="w-7 h-auto" />
       </DialogTrigger>
       <DialogContent class="left-[50%] top-0 translate-y-0" widthIcon="w-7">
+        <VisuallyHidden>
+          <DialogDescription></DialogDescription>
+          <DialogTitle></DialogTitle>
+        </VisuallyHidden>
         <NuxtLink
           class="p-2"
           v-for="(centerLink, index) in centerLinks"
