@@ -43,7 +43,9 @@ async function handleLogout() {
 }
 </script>
 <template>
-  <nav class="hidden lg:grid grid-cols-12 gap-4 max-w-7xl mx-auto text-lg font-semibold mt-4">
+  <nav
+    class="hidden lg:grid grid-cols-12 gap-4 max-w-7xl mx-auto text-lg font-semibold mt-4"
+  >
     <NuxtLink to="/" class="col-span-3 py-2 font-bold"> Jobnav </NuxtLink>
     <div class="col-span-6 place-self-center">
       <NuxtLink
@@ -82,7 +84,12 @@ async function handleLogout() {
     <!-- Start code here -->
     <!-- End code here -->
     <div class="col-span-1 place-self-end self-center">
-      <Button variant="ghost" class="p-2" @click="toggleDark()">
+      <Button
+        variant="ghost"
+        :title="isDark ? 'Turn on light mode' : 'Turn on dark mode'"
+        class="p-2"
+        @click="toggleDark()"
+      >
         <Icon name="ph:moon-fill" v-if="!isDark" class="h-5 w-5" />
         <Icon name="ph:sun-dim-fill" v-else class="h-5 w-5" />
         <span class="sr-only">Toggle dark mode</span>
@@ -114,7 +121,11 @@ async function handleLogout() {
         </NuxtLink>
         <div v-if="isLogedIn" class="px-2 gap-2">
           <NuxtLink to="/dashboard" class="flex items-center gap-3">
-            <img :src="user?.avatar" :alt="user?.name" class="w-9 h-9 rounded-full" />
+            <img
+              :src="user?.avatar"
+              :alt="user?.name"
+              class="w-9 h-9 rounded-full"
+            />
             <span>{{ user?.name }}</span>
           </NuxtLink>
           <button class="py-3" @click="handleLogout">logout</button>
@@ -134,7 +145,9 @@ async function handleLogout() {
 
         <div class="flex items-center space-x-2">
           <Switch id="dark-mode" v-model:checked="isDark" />
-          <Label class="pl-3 cursor-pointer" for="dark-mode">Enable Dark Mode</Label>
+          <Label class="pl-3 cursor-pointer" for="dark-mode">
+            Dark Mode {{ isDark ? "Enabled" : "Disabled" }}</Label
+          >
         </div>
       </DialogContent>
     </Dialog>
