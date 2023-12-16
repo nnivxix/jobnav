@@ -3,6 +3,9 @@ export interface PaginateResponse<T> {
   links: Links;
   meta: Meta;
 }
+export interface SingleResponse<T> {
+  data: T;
+}
 
 export interface Links {
   first: string;
