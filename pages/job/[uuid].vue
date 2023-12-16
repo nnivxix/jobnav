@@ -10,7 +10,7 @@ const { data: job } = useFetch<SingleResponse<Job>>(`api/jobs/${params.uuid}`, {
 
 <template>
   <!-- <pre>{{ job }}</pre> -->
-  <main class="max-w-7xl mx-auto grid gap-5 grid-cols-8 px-4">
+  <main class="max-w-7xl mx-auto grid gap-5 grid-cols-8 px-4 lg:px-0">
     <article class="col-span-full lg:col-span-6">
       <h1 class="py-4 text-2xl">{{ job?.data.title }}</h1>
       <div class="grid gap-3 grid-cols-8">

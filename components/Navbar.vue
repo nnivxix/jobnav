@@ -84,7 +84,12 @@ async function handleLogout() {
     <!-- Start code here -->
     <!-- End code here -->
     <div class="col-span-1 place-self-end self-center">
-      <Button variant="ghost" class="p-2" @click="toggleDark()">
+      <Button
+        variant="ghost"
+        :title="isDark ? 'Turn on light mode' : 'Turn on dark mode'"
+        class="p-2"
+        @click="toggleDark()"
+      >
         <Icon name="ph:moon-fill" v-if="!isDark" class="h-5 w-5" />
         <Icon name="ph:sun-dim-fill" v-else class="h-5 w-5" />
         <span class="sr-only">Toggle dark mode</span>
