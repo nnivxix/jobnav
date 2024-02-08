@@ -10,19 +10,23 @@ const { isLogedIn, user } = storeToRefs(useAuthStore());
 const centerLinks = ref([
   {
     name: "Find Jobs",
-    destination: "/jobs",
+    // destination: "/jobs",
+    destination: "/#",
   },
   {
     name: "Companies",
-    destination: "/companies",
+    // destination: "/companies",
+    destination: "/#",
   },
   {
     name: "Tips",
-    destination: "/tips",
+    // destination: "/tips",
+    destination: "/#",
   },
   {
     name: "Services",
-    destination: "/services",
+    // destination: "/services",
+    destination: "/#",
   },
 ]);
 
@@ -65,7 +69,7 @@ async function handleLogout() {
           :src="user?.avatar"
           :title="user?.name"
           :alt="user?.name"
-          class="w-9 h-9 rounded-full"
+          class="w-9 h-9 rounded-full object-cover"
         />
       </NuxtLink>
       <Button @click="handleLogout" class="ml-5"> logout </Button>
@@ -124,7 +128,7 @@ async function handleLogout() {
             <img
               :src="user?.avatar"
               :alt="user?.name"
-              class="w-9 h-9 rounded-full"
+              class="w-9 h-9 rounded-full object-cover"
             />
             <span>{{ user?.name }}</span>
           </NuxtLink>
