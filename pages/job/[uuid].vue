@@ -3,9 +3,12 @@ import type { Job } from "~/types/job";
 import type { SingleResponse } from "~/types/response";
 const { params } = useRoute();
 
+// TODO: use laravel fetch
 const { data: job } = useFetch<SingleResponse<Job>>(`api/jobs/${params.uuid}`, {
   baseURL: useRuntimeConfig().public.backendUrl,
 });
+
+const { showDetailModal } = useJobApply();
 </script>
 
 <template>
@@ -30,7 +33,10 @@ const { data: job } = useFetch<SingleResponse<Job>>(`api/jobs/${params.uuid}`, {
           </p>
         </div>
         <div class="hidden lg:block lg:col-start-7 lg:col-span-2 col-span-full">
-          <Button variant="default" class="w-full my-2 font-semibold"
+          <Button
+            variant="default"
+            class="w-full my-2 font-semibold"
+            @click="showDetailModal(job?.data!)"
             >Apply</Button
           >
           <Button variant="outline" class="w-full my-2">Share</Button>
@@ -50,13 +56,17 @@ const { data: job } = useFetch<SingleResponse<Job>>(`api/jobs/${params.uuid}`, {
 
     <div class="fixed z-20 lg:hidden bottom-0 left-0 bg-background w-full px-4">
       <div class="lg:col-start-7 lg:col-span-2 col-span-full">
-        <Button variant="default" class="w-full my-2 font-semibold"
+        <Button
+          variant="default"
+          class="w-full my-2 font-semibold"
+          @click="showDetailModal(job?.data!, 'bottom')"
           >Apply</Button
         >
         <Button variant="outline" class="w-full my-2">Share</Button>
       </div>
     </div>
   </main>
+  <JobApply :job="job?.data!" />
 </template>
 
 <style scoped></style>
