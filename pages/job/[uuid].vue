@@ -3,6 +3,7 @@ import type { Job } from "~/types/job";
 import type { SingleResponse } from "~/types/response";
 const { params } = useRoute();
 
+// TODO: use laravel fetch
 const { data: job } = useFetch<SingleResponse<Job>>(`api/jobs/${params.uuid}`, {
   baseURL: useRuntimeConfig().public.backendUrl,
 });

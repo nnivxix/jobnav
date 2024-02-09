@@ -43,7 +43,7 @@ const submitForm = jobForm.handleSubmit(async () => {
     > -->
     <SheetContent :side="side">
       <SheetHeader>
-        <SheetTitle>Apply Job as {{ job?.title }}</SheetTitle>
+        <!-- <SheetTitle>Apply Job as {{ job?.title }}</SheetTitle> -->
         <SheetDescription>
           <form @submit.prevent="submitForm" class="grid grid-cols-1 gap-2">
             <FormField
