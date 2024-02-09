@@ -1,32 +1,8 @@
-// TODO: Refactor useLaravelFetch
-
-export interface LaravelFetchOptions {
-  method:
-    | "GET"
-    | "HEAD"
-    | "PATCH"
-    | "POST"
-    | "PUT"
-    | "DELETE"
-    | "CONNECT"
-    | "OPTIONS"
-    | "TRACE"
-    | "head"
-    | "patch"
-    | "post"
-    | "put"
-    | "delete"
-    | "connect"
-    | "options"
-    | "trace";
-  body?: any | null;
-  headers?: any;
-}
-
-const useLaravelFetch = (
+import type { UseFetchOptions } from "nuxt/app";
+export function useLaravelFetch<T>(
   path: string,
-  options?: Partial<LaravelFetchOptions>,
-) => {
+  options: UseFetchOptions<T> = {},
+) {
   let headers: any = {
     accept: "application/json",
     // "Content-Type": "application/json",
@@ -57,13 +33,11 @@ const useLaravelFetch = (
   return useFetch(path, {
     baseURL: useRuntimeConfig().public.backendUrl,
     credentials: "include",
+    ...options,
+    watch: false,
     headers: {
       ...headers,
+      ...options?.headers,
     },
-    method: options?.method,
-    body: options?.body,
-    watch: false,
   });
-};
-
-export default useLaravelFetch;
+}
