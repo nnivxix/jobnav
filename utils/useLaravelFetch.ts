@@ -21,10 +21,13 @@ export interface LaravelFetchOptions {
   headers?: any;
 }
 
-const useLaravelFetch = (path: string, options?: Partial<LaravelFetchOptions>) => {
+const useLaravelFetch = (
+  path: string,
+  options?: Partial<LaravelFetchOptions>,
+) => {
   let headers: any = {
     accept: "application/json",
-    "Content-Type": "application/json",
+    // "Content-Type": "application/json",
     ...options?.headers,
   };
 
@@ -47,6 +50,8 @@ const useLaravelFetch = (path: string, options?: Partial<LaravelFetchOptions>) =
       referer: useRuntimeConfig().public.frontendUrl,
     };
   }
+
+  // TODO: Set error
   return useFetch(path, {
     baseURL: useRuntimeConfig().public.backendUrl,
     credentials: "include",
