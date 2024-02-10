@@ -1,14 +1,16 @@
 <script lang="ts" setup>
 import { useForm, Form, Field as FormField, ErrorMessage } from "vee-validate";
-
 import type { Job } from "~/types/job";
 import { useToast } from "./ui/toast/use-toast";
 
+interface ApplyJob {
+  message: string;
+}
 const { job } = defineProps<{
   job?: Job;
 }>();
 
-const { isModalShow, detailJob, side } = useJobApply();
+const { isModalShow, side } = useJobApply();
 
 const jobForm = useForm();
 const { toast } = useToast();
@@ -19,35 +21,37 @@ const submitForm = jobForm.handleSubmit(async () => {
     form.append(key, value);
   });
 
-  const response = await useLaravelFetch(`/api/jobs/${job?.uuid}/apply`, {
-    method: "POST",
-    body: form,
-  });
+  const response = await useLaravelFetch<ApplyJob>(
+    `/api/jobs/${job?.uuid}/apply`,
+    {
+      method: "POST",
+      body: form,
+      onResponseError({ response }) {
+        jobForm.setErrors(response._data?.errors);
+      },
+    },
+  );
+  if (response.data.value) {
+    toast({
+      title: "Success",
+      description: response.data.value?.message,
+    });
 
-  toast({
-    title: "Success",
-    description: response.data.value?.message,
-  });
-
-  jobForm.handleReset();
-  isModalShow.value = false;
+    jobForm.handleReset();
+    isModalShow.value = false;
+  }
 });
 </script>
 
 <template>
   <Sheet v-model:open="isModalShow">
-    <!-- <SheetTrigger>
-      <Button variant="default" class="w-full my-2 font-semibold"
-        >Apply</Button
-      ></SheetTrigger
-    > -->
     <SheetContent :side="side">
       <SheetHeader>
-        <!-- <SheetTitle>Apply Job as {{ job?.title }}</SheetTitle> -->
+        <SheetTitle>Apply Job as {{ job?.title }}</SheetTitle>
         <SheetDescription>
           <form @submit.prevent="submitForm" class="grid grid-cols-1 gap-2">
             <FormField
-              v-slot="{ componentField, field, errorMessage }"
+              v-slot="{ componentField, errorMessage }"
               name="cover_letter"
             >
               <FormItem>
@@ -55,14 +59,19 @@ const submitForm = jobForm.handleSubmit(async () => {
                 <FormControl>
                   <Textarea v-bind="componentField" />
                 </FormControl>
+                <span class="text-destructive">{{ errorMessage }}</span>
               </FormItem>
             </FormField>
-            <FormField v-slot="{ handleChange, field }" name="attachment">
+            <FormField
+              v-slot="{ handleChange, errorMessage }"
+              name="attachment"
+            >
               <FormItem>
                 <FormLabel>Attachment</FormLabel>
                 <FormControl>
                   <Input type="file" @change="handleChange" />
                 </FormControl>
+                <span class="text-destructive">{{ errorMessage }}</span>
               </FormItem>
             </FormField>
 
