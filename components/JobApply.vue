@@ -21,17 +21,15 @@ const submitForm = jobForm.handleSubmit(async () => {
     form.append(key, value);
   });
 
-  const response = await useLaravelFetch<ApplyJob>(
-    `/api/jobs/${job?.uuid}/apply`,
-    {
-      method: "POST",
-      body: form,
-      onResponseError({ response }) {
-        jobForm.setErrors(response._data?.errors);
+  try {
+    const response = await $larafetch<ApplyJob>(
+      `/api/jobs/${job?.uuid}/apply`,
+      {
+        method: "POST",
+        body: form,
       },
-    },
-  );
-  if (response.data.value) {
+    );
+
     toast({
       title: "Success",
       description: response.data.value?.message,
@@ -39,6 +37,8 @@ const submitForm = jobForm.handleSubmit(async () => {
 
     jobForm.handleReset();
     isModalShow.value = false;
+  } catch (error: any) {
+    console.log(error.data?.errors);
   }
 });
 </script>
