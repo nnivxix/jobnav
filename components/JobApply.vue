@@ -32,13 +32,13 @@ const submitForm = jobForm.handleSubmit(async () => {
 
     toast({
       title: "Success",
-      description: response.data.value?.message,
+      description: response.message,
     });
 
     jobForm.handleReset();
     isModalShow.value = false;
   } catch (error: any) {
-    console.log(error.data?.errors);
+    jobForm.setErrors(error.data.errors);
   }
 });
 </script>

@@ -36,7 +36,6 @@ const { showDetailModal } = useJobApply();
         </div>
         <div class="hidden lg:block lg:col-start-7 lg:col-span-2 col-span-full">
           <Button
-            :disabled="job?.data.is_applied_by_user"
             variant="default"
             class="w-full my-2 font-semibold"
             @click="showDetailModal(job?.data!)"
@@ -60,7 +59,6 @@ const { showDetailModal } = useJobApply();
     <div class="fixed z-20 lg:hidden bottom-0 left-0 bg-background w-full px-4">
       <div class="lg:col-start-7 lg:col-span-2 col-span-full">
         <Button
-          :disabled="job?.data.is_applied_by_user"
           variant="default"
           class="w-full my-2 font-semibold"
           @click="showDetailModal(job?.data!, 'bottom')"
