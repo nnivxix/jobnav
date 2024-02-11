@@ -15,12 +15,16 @@ const form = useForm({
     password: "password",
   },
 });
-
-const submit = form.handleSubmit(async (values: { email: string; password: string }) => {
-  await login(values);
-  const data = await fetchUser();
-  const userData = ref<UserResponse | null>(data.value as UserResponse);
-  updateUser(userData.value?.data);
+const { submit } = useSubmit(async () => await login(form.values), {
+  async onSuccess() {
+    const data = await fetchUser();
+    const userData = ref<UserResponse | null>(data.value as UserResponse);
+    updateUser(userData.value?.data);
+    return navigateTo("/dashboard");
+  },
+  onError(error) {
+    form.setFieldError("email", error.data.errors.message);
+  },
 });
 const showPassword = ref(false);
 </script>
@@ -35,7 +39,11 @@ const showPassword = ref(false);
         <FormItem>
           <FormLabel>Email</FormLabel>
           <FormControl>
-            <Input type="email" placeholder="your_name@mail.com" v-bind="componentField" />
+            <Input
+              type="email"
+              placeholder="your_name@mail.com"
+              v-bind="componentField"
+            />
           </FormControl>
           <FormMessage />
         </FormItem>
@@ -45,7 +53,10 @@ const showPassword = ref(false);
           <FormLabel>Password</FormLabel>
           <FormControl>
             <div class="relative">
-              <Input :type="showPassword ? 'text' : 'password'" v-bind="componentField" />
+              <Input
+                :type="showPassword ? 'text' : 'password'"
+                v-bind="componentField"
+              />
               <Icon
                 :name="showPassword ? 'ph:eye-light' : 'ph:eye-slash'"
                 @click="showPassword = !showPassword"

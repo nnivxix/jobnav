@@ -6,25 +6,13 @@ export type LoginCredentials = {
   password: string;
 };
 
-// const {  updateUser } = useAuthStore();
-
 export const useAuth = () => {
   async function login(credentials: LoginCredentials) {
     await useLaravelFetch("/sanctum/csrf-cookie");
-    const { data, error } = await useLaravelFetch("/api/login", {
+    const { data, error } = await $larafetch("/api/login", {
       method: "POST",
       body: credentials,
     });
-    if (data.value) {
-      await fetchUser();
-      navigateTo("/dashboard");
-      return data;
-    }
-
-    /** TODO
-     * Handle error
-     *
-     */
   }
   async function fetchUser() {
     const { data } = await useLaravelFetch("/api/users");
