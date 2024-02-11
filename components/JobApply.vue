@@ -15,32 +15,36 @@ const { isModalShow, side } = useJobApply();
 const jobForm = useForm();
 const { toast } = useToast();
 
-const submitForm = jobForm.handleSubmit(async () => {
-  const form = new FormData();
-  Object.entries(jobForm.values).forEach(([key, value]) => {
-    form.append(key, value);
-  });
-
-  try {
-    const response = await $larafetch<ApplyJob>(
-      `/api/jobs/${job?.uuid}/apply`,
-      {
-        method: "POST",
-        body: form,
-      },
-    );
-
-    toast({
-      title: "Success",
-      description: response.message,
+const { submit, inProgress } = useSubmit(
+  async () => {
+    const form = new FormData();
+    Object.entries(jobForm.values).forEach(([key, value]) => {
+      form.append(key, value);
     });
+    return await $larafetch<ApplyJob>(`/api/jobs/${job?.uuid}/apply`, {
+      method: "POST",
+      body: form,
+    });
+  },
+  {
+    onSuccess(data) {
+      toast({
+        title: "Success",
+        description: data.message,
+      });
 
-    jobForm.handleReset();
-    isModalShow.value = false;
-  } catch (error: any) {
-    jobForm.setErrors(error.data.errors);
-  }
-});
+      jobForm.handleReset();
+      isModalShow.value = false;
+    },
+    onError(error) {
+      jobForm.setErrors(error.data?.errors);
+      toast({
+        title: "Failed",
+        description: error.data.message,
+      });
+    },
+  },
+);
 </script>
 
 <template>
@@ -49,33 +53,35 @@ const submitForm = jobForm.handleSubmit(async () => {
       <SheetHeader>
         <SheetTitle>Apply Job as {{ job?.title }}</SheetTitle>
         <SheetDescription>
-          <form @submit.prevent="submitForm" class="grid grid-cols-1 gap-2">
-            <FormField
-              v-slot="{ componentField, errorMessage }"
-              name="cover_letter"
-            >
+          <form @submit.prevent="submit" class="grid grid-cols-1 gap-4">
+            <FormField v-slot="{ componentField }" name="cover_letter">
               <FormItem>
                 <FormLabel>Cover Letter</FormLabel>
                 <FormControl>
                   <Textarea v-bind="componentField" />
                 </FormControl>
-                <span class="text-destructive">{{ errorMessage }}</span>
+                <FormMessage />
               </FormItem>
             </FormField>
-            <FormField
-              v-slot="{ handleChange, errorMessage }"
-              name="attachment"
-            >
+            <FormField v-slot="{ handleChange }" name="attachment">
               <FormItem>
                 <FormLabel>Attachment</FormLabel>
                 <FormControl>
                   <Input type="file" @change="handleChange" />
                 </FormControl>
-                <span class="text-destructive">{{ errorMessage }}</span>
+                <FormMessage />
               </FormItem>
             </FormField>
 
-            <Button type="submit"> Apply </Button>
+            <Button type="submit">
+              <span
+                ><Icon
+                  name="lucide:loader-2"
+                  class="animate-spin mr-1"
+                  v-if="inProgress"
+              /></span>
+              Apply
+            </Button>
           </form>
         </SheetDescription>
       </SheetHeader>
