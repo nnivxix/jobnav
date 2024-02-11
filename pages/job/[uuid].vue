@@ -2,19 +2,22 @@
 import type { Job } from "~/types/job";
 import type { SingleResponse } from "~/types/response";
 const { params } = useRoute();
+const { showDetailModal } = useJobApply();
+const { isLogedIn } = storeToRefs(useAuthStore());
 
-const { data: job } = useLaravelFetch<SingleResponse<Job>>(
+const { data: job, refresh } = useLaravelFetch<SingleResponse<Job>>(
   `api/jobs/${params.uuid}`,
   {
     baseURL: useRuntimeConfig().public.backendUrl,
   },
 );
 
-const { showDetailModal } = useJobApply();
+const canApply = computed(() => {
+  return !isLogedIn.value || job.value?.data.is_applied_by_user;
+});
 </script>
 
 <template>
-  <!-- <pre>{{ job }}</pre> -->
   <main class="relative max-w-7xl mx-auto grid gap-5 grid-cols-8 px-4 lg:px-0">
     <article class="col-span-full lg:col-span-6">
       <h1 class="py-4 text-2xl">{{ job?.data.title }}</h1>
@@ -36,6 +39,7 @@ const { showDetailModal } = useJobApply();
         </div>
         <div class="hidden lg:block lg:col-start-7 lg:col-span-2 col-span-full">
           <Button
+            :disabled="canApply"
             variant="default"
             class="w-full my-2 font-semibold"
             @click="showDetailModal(job?.data!)"
@@ -59,6 +63,7 @@ const { showDetailModal } = useJobApply();
     <div class="fixed z-20 lg:hidden bottom-0 left-0 bg-background w-full px-4">
       <div class="lg:col-start-7 lg:col-span-2 col-span-full">
         <Button
+          :disabled="canApply"
           variant="default"
           class="w-full my-2 font-semibold"
           @click="showDetailModal(job?.data!, 'bottom')"
@@ -68,7 +73,7 @@ const { showDetailModal } = useJobApply();
       </div>
     </div>
   </main>
-  <JobApply :job="job?.data!" />
+  <JobApply :job="job?.data!" @refresh="refresh" />
 </template>
 
 <style scoped></style>
