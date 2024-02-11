@@ -6,7 +6,7 @@ import { useForm, Form, Field as FormField } from "vee-validate";
 definePageMeta({
   middleware: "login",
 });
-const { login, fetchUser } = useAuth();
+const { login } = useAuth();
 const { updateUser } = useAuthStore();
 
 const form = useForm({
@@ -16,11 +16,16 @@ const form = useForm({
   },
 });
 
-const submit = form.handleSubmit(async (values: { email: string; password: string }) => {
-  await login(values);
-  const data = await fetchUser();
-  const userData = ref<UserResponse | null>(data.value as UserResponse);
-  updateUser(userData.value?.data);
+const { submit, inProgress } = useSubmit(async () => await login(form.values), {
+  async onSuccess(data) {
+    // const user = await fetchUser();
+    // const userData = ref<UserResponse | null>(user.value as UserResponse);
+    // updateUser(userData.value?.data);
+    return navigateTo("/dashboard");
+  },
+  onError(error) {
+    form.setFieldError("email", error.data.errors.message);
+  },
 });
 const showPassword = ref(false);
 </script>
@@ -35,7 +40,11 @@ const showPassword = ref(false);
         <FormItem>
           <FormLabel>Email</FormLabel>
           <FormControl>
-            <Input type="email" placeholder="your_name@mail.com" v-bind="componentField" />
+            <Input
+              type="email"
+              placeholder="your_name@mail.com"
+              v-bind="componentField"
+            />
           </FormControl>
           <FormMessage />
         </FormItem>
@@ -45,7 +54,10 @@ const showPassword = ref(false);
           <FormLabel>Password</FormLabel>
           <FormControl>
             <div class="relative">
-              <Input :type="showPassword ? 'text' : 'password'" v-bind="componentField" />
+              <Input
+                :type="showPassword ? 'text' : 'password'"
+                v-bind="componentField"
+              />
               <Icon
                 :name="showPassword ? 'ph:eye-light' : 'ph:eye-slash'"
                 @click="showPassword = !showPassword"
@@ -57,7 +69,7 @@ const showPassword = ref(false);
         </FormItem>
       </FormField>
       <div>
-        <Button type="submit"> Log in </Button>
+        <Button type="submit" :is-loading="inProgress"> Log in </Button>
       </div>
     </form>
   </div>

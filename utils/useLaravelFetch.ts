@@ -22,12 +22,12 @@ export function useLaravelFetch<T>(
   // }
 
   if (process.server) {
-    headers = {
-      ...headers,
-      ...useRequestHeaders(["referer", "cookie"]),
-      referer: useRuntimeConfig().public.frontendUrl,
-    };
   }
+  headers = {
+    ...headers,
+    ...useRequestHeaders(["referer", "cookie"]),
+    referer: useRuntimeConfig().public.frontendUrl,
+  };
 
   // TODO: Set error
   return useFetch(path, {

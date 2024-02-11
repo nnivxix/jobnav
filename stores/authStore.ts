@@ -27,5 +27,9 @@ export const useAuthStore = defineStore("authStore", () => {
     user.value = data;
   }
 
-  return { user, isLogedIn, token, updateUser, updateToken };
+  function $reset() {
+    user.value = null;
+  }
+
+  return { user, isLogedIn, token, updateUser, updateToken, $reset };
 });

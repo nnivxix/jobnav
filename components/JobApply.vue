@@ -77,15 +77,7 @@ const { submit, inProgress } = useSubmit(
               </FormItem>
             </FormField>
 
-            <Button type="submit">
-              <span
-                ><Icon
-                  name="lucide:loader-2"
-                  class="animate-spin mr-1"
-                  v-if="inProgress"
-              /></span>
-              Apply
-            </Button>
+            <Button type="submit" :is-loading="inProgress"> Apply </Button>
           </form>
         </SheetDescription>
       </SheetHeader>

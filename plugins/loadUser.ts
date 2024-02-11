@@ -1,12 +1,10 @@
-export interface UserResponse {
-  data: User;
-}
-export default defineNuxtPlugin(async (nuxtApp) => {
-  const auth = useAuthStore();
-  const { fetchUser } = useAuth();
+import { useUser, fetchCurrentUser } from "~/composables/useAuth";
 
-  if (auth.user) return;
-  const data = await fetchUser();
-  const userData = ref<UserResponse | null>(data.value as UserResponse);
-  auth.updateUser(userData.value?.data);
+export default defineNuxtPlugin(async () => {
+  const user = useUser();
+
+  // Skip if already initialized on server
+  if (user.value !== undefined) return;
+
+  user.value = await fetchCurrentUser();
 });

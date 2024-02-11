@@ -5,9 +5,7 @@ import { Label } from "radix-vue";
 const isDark = useDark();
 const toggleDark = useToggle(isDark);
 const { path } = useRoute();
-const { logout } = useAuth();
-const { updateUser } = useAuthStore();
-const { isLogedIn, user } = storeToRefs(useAuthStore());
+const { logout, user, isLoggedIn } = useAuth();
 const centerLinks = ref([
   {
     name: "Find Jobs",
@@ -44,7 +42,8 @@ const rightLinks = ref([
 ]);
 
 async function handleLogout() {
-  updateUser(null);
+  // updateUser(null);
+  // $reset();
   logout(path);
 }
 </script>
@@ -65,7 +64,7 @@ async function handleLogout() {
     </div>
 
     <!-- Condition if authenticated -->
-    <div v-if="isLogedIn" class="col-span-2 place-self-end self-center flex">
+    <div v-if="isLoggedIn" class="col-span-2 place-self-end self-center flex">
       <NuxtLink to="/dashboard">
         <img
           :src="user?.avatar"
@@ -125,7 +124,7 @@ async function handleLogout() {
             {{ centerLink.name }}
           </DialogClose>
         </NuxtLink>
-        <div v-if="isLogedIn" class="px-2 gap-2">
+        <div v-if="isLoggedIn" class="px-2 gap-2">
           <NuxtLink to="/dashboard" class="flex items-center gap-3">
             <img
               :src="user?.avatar"
