@@ -3,11 +3,12 @@ import { useForm, Form, Field as FormField, ErrorMessage } from "vee-validate";
 import type { Job } from "~/types/job";
 import { useToast } from "./ui/toast/use-toast";
 
-interface ApplyJob {
-  message: string;
-}
 const { job } = defineProps<{
   job?: Job;
+}>();
+
+const emit = defineEmits<{
+  (e: "refresh"): void;
 }>();
 
 const { isModalShow, side } = useJobApply();
@@ -21,7 +22,9 @@ const { submit, inProgress } = useSubmit(
     Object.entries(jobForm.values).forEach(([key, value]) => {
       form.append(key, value);
     });
-    return await $larafetch<ApplyJob>(`/api/jobs/${job?.uuid}/apply`, {
+    return await $larafetch<{
+      message: string;
+    }>(`/api/jobs/${job?.uuid}/apply`, {
       method: "POST",
       body: form,
     });
@@ -32,16 +35,17 @@ const { submit, inProgress } = useSubmit(
         title: "Success",
         description: data.message,
       });
-
+      emit("refresh");
       jobForm.handleReset();
       isModalShow.value = false;
     },
     onError(error) {
-      jobForm.setErrors(error.data?.errors);
       toast({
         title: "Failed",
         description: error.data.message,
       });
+      if (error.statusCode !== 422) return;
+      jobForm.setErrors(error.data?.errors);
     },
   },
 );

@@ -32,12 +32,12 @@ export const useAuth = () => {
     return data;
   }
 
-  async function logout() {
+  async function logout(path: string = "/") {
     await useLaravelFetch("/api/logout", {
       method: "POST",
     });
     window.localStorage.removeItem("token");
-    navigateTo("/");
+    navigateTo(path);
   }
 
   return {

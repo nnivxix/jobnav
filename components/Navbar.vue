@@ -4,6 +4,7 @@ import { Label } from "radix-vue";
 
 const isDark = useDark();
 const toggleDark = useToggle(isDark);
+const { path } = useRoute();
 const { logout } = useAuth();
 const { updateUser } = useAuthStore();
 const { isLogedIn, user } = storeToRefs(useAuthStore());
@@ -37,13 +38,14 @@ const rightLinks = ref([
   },
   {
     name: "Sign up",
-    destination: "/sign-up",
+    // destination: "/sign-up",
+    destination: "/#",
   },
 ]);
 
 async function handleLogout() {
   updateUser(null);
-  logout();
+  logout(path);
 }
 </script>
 <template>
