@@ -2,9 +2,12 @@
 import type { Job, Jobs } from "~/types/job";
 import type { PaginateResponse } from "~/types/response";
 
-const { data: jobs } = await useFetch<PaginateResponse<Jobs>>("/api/jobs", {
-  baseURL: useRuntimeConfig().public.backendUrl,
-});
+const { data: jobs } = await useLaravelFetch<PaginateResponse<Jobs>>(
+  "/api/jobs",
+  {
+    baseURL: useRuntimeConfig().public.backendUrl,
+  },
+);
 </script>
 <template>
   <div>
